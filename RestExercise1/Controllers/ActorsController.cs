@@ -17,64 +17,39 @@ namespace RestExercise1.Controllers
 
         // GET: api/Actors
         [HttpGet]
-        public ActionResult<IEnumerable<Actor>> Get()
+        public IEnumerable<Actor> Get()
         {
-            return Ok(_actorsRepository.Get());
+            return _actorsRepository.Get();
+   
         }
 
         // GET api/Actors/5
         [HttpGet("{id}")]
-        public ActionResult<Actor> Get(int id)
+        public Actor Get(int id)
         {
-            var actor = _actorsRepository.Get().FirstOrDefault(a => a.Id == id);
+            return _actorsRepository.GetId(id);
 
-            if (actor == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(actor);
         }
 
         // POST api/Actors
         [HttpPost]
-        public ActionResult<Actor> Post([FromBody] Actor actor)
+        public Actor Post([FromBody] Actor actor)
         {
-            var addedActor = _actorsRepository.Add(actor);
-            return CreatedAtAction(nameof(Get), new { id = addedActor.Id }, addedActor);
+            return _actorsRepository.Add(actor);
         }
 
         // PUT api/Actors/5
         [HttpPut("{id}")]
-        public ActionResult<Actor> Put(int id, [FromBody] Actor actor)
+        public Actor Put(int id, [FromBody] Actor actor)
         {
-            if (id != actor.Id)
-            {
-                return BadRequest();
-            }
-
-            var updatedActor = _actorsRepository.Update(id, actor);
-
-            if (updatedActor == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(updatedActor);
+            return _actorsRepository?.Update(id, actor)!;
         }
 
         // DELETE api/Actors/5
         [HttpDelete("{id}")]
-        public ActionResult<Actor> Delete(int id)
+        public Actor Delete(int id)
         {
-            var actor = _actorsRepository.Delete(id);
-
-            if (actor == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(actor);
+            return _actorsRepository?.Delete(id)!;
         }
     }
 }
